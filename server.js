@@ -11,6 +11,14 @@ const database = {
             password: 'cookies',
             entries: 0,
             joined: new Date()
+        },
+        {
+            id: '124',
+            name: 'Sally',
+            email: 'sally@gmail.com',
+            password: 'bananas',
+            entries: 0,
+            joined: new Date()
         }
     ]
 }
