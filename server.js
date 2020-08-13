@@ -20,6 +20,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get('/', (req, res) => { res.send('it is working!') })
+
 app.post('/signin', (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
