@@ -103,7 +103,7 @@ app.put('/image', (req, res) => {
 })
 
 const clarifai = new Clarifai.App({
-    apiKey: '6d0d0a0d4b514f6bbea44494506a506b'
+    apiKey: process.env.CLARIFAI_API
 });
 
 app.post('/imageurl', (req, res) => {
