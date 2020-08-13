@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
+const Clarifai = require('clarifai');
 
 const postgres = knex({
     client: 'pg',
@@ -10,12 +11,8 @@ const postgres = knex({
       host : '127.0.0.1',
       user : 'postgres',
       password : 'monjoseph7',
-      database : 'smart-brain'
+      database : 'smartbrain'
     }
-  });
-
-  postgres.select('*').from('users').then(data => {
-      console.log(data);
   });
 
 const app = express();
@@ -23,46 +20,18 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const database = {
-    users: [
-        {
-            id: '123',
-            name: 'John',
-            password: 'cookies',
-            email: 'john@gmail.com',
-            entries: 0,
-            joined: new Date()
-        },
-        {
-            id: '124',
-            name: 'Sally',
-            password: 'bananas',
-            email: 'sally@gmail.com',
-            entries: 0,
-            joined: new Date()
-        }
-    ],
-    login: [
-        {
-            id: '987',
-            hash: '',
-            email: 'john@gmail.com'
-        }
-    ]
-}
-
-app.get('/', (req, res) => {
-    res.send(database.users);
-});
-
 app.post('/signin', (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(404).json('incorrect form submission')
+    }
     postgres.select('email', 'hash').from('login')
-    .where('email', '=', req.body.email)
+    .where('email', '=', email)
     .then(data => {
-        const isValid = bcrypt.compareSync(req.body.password, data[0].hash); // true?
+        const isValid = bcrypt.compareSync(password, data[0].hash); 
         if (isValid) {
             return postgres.select('*').from('users')
-            .where('email', '=', req.body.email)
+            .where('email', '=', email)
             .then(user => {
                 res.json(user[0])
             })
@@ -76,6 +45,9 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     const { email, name, password } = req.body;
+    if (!email || !name || !password) {
+        return res.status(404).json('incorrect form submission')
+    }
     const hash = bcrypt.hashSync(password);
     postgres.transaction(trx => {
         trx.insert({
@@ -128,6 +100,18 @@ app.put('/image', (req, res) => {
         res.json(entries[0]);
     })
     .catch(err => res.status(40).json('unable to get entries'))
+})
+
+const clarifai = new Clarifai.App({
+    apiKey: '6d0d0a0d4b514f6bbea44494506a506b'
+});
+
+app.post('/imageurl', (req, res) => {
+    clarifai.models.predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
+    .then(data => {
+        res.json(data)
+    })
+    .catch(err => res.status(404).json('unable to work with API'))
 })
 
 app.listen(3001, () => {
