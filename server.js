@@ -114,6 +114,6 @@ app.post('/imageurl', (req, res) => {
     .catch(err => res.status(404).json('unable to work with API'))
 })
 
-app.listen(3001, () => {
-    console.log('app is running on port 3001');
+app.listen(process.env.PORT || 3001, () => {
+    console.log(`app is running on port ${process.env.PORT}`);
 });
