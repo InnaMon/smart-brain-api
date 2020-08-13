@@ -10,11 +10,11 @@ const postgres = knex({
     connection: {
       host : '127.0.0.1',
       user : 'postgres',
-      password : 'monjoseph7',
+      password : process.env.DATABASE_PW,
       database : 'smartbrain'
     }
   });
-
+  
 const app = express();
 
 app.use(bodyParser.json());
