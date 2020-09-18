@@ -5,6 +5,10 @@ const cors = require('cors');
 const knex = require('knex');
 const Clarifai = require('clarifai');
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+  }
+
 const postgres = knex({
     client: 'pg',
     connection: {
