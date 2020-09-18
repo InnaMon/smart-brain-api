@@ -4,10 +4,7 @@ const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
 const Clarifai = require('clarifai');
-
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-  }
+const { CLARIFAI_API } = require('./config');
 
 const postgres = knex({
     client: 'pg',
@@ -107,11 +104,8 @@ app.put('/image', (req, res) => {
 })
 
 const clarifai = new Clarifai.App({
-    apiKey: process.env.CLARIFAI_API
+    apiKey: CLARIFAI_API
 });
-
-console.log('process object', process.env);
-console.log('calrifai api', process.env.CLARIFAI_API)
 
 app.post('/imageurl', (req, res) => {
     clarifai.models.predict('c0c0ac362b03416da06ab3fa36fb58e3', req.body.input)
