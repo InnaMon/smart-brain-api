@@ -103,11 +103,14 @@ app.put('/image', (req, res) => {
 })
 
 const clarifai = new Clarifai.App({
-    apiKey: '6d0d0a0d4b514f6bbea44494506a506b'
+    apiKey: process.env.CLARIFAI_API
 });
 
+console.log('process object', process.env);
+console.log('calrifai api', process.env.CLARIFAI_API)
+
 app.post('/imageurl', (req, res) => {
-    clarifai.models.predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
+    clarifai.models.predict('c0c0ac362b03416da06ab3fa36fb58e3', req.body.input)
     .then(data => {
         res.json(data)
     })
