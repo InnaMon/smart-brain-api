@@ -100,7 +100,7 @@ app.put('/image', (req, res) => {
     .then(entries => {
         res.json(entries[0]);
     })
-    .catch(err => res.status(40).json('unable to get entries'))
+    .catch(err => res.status(404).json('unable to get entries'))
 })
 
 const clarifai = new Clarifai.App({
@@ -108,7 +108,7 @@ const clarifai = new Clarifai.App({
 });
 
 app.post('/imageurl', (req, res) => {
-    clarifai.models.predict(FACE_DETECT_MODEL, req.body.input)
+    clarifai.models.predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
     .then(data => {
         res.json(data)
     })
