@@ -108,7 +108,7 @@ const clarifai = new Clarifai.App({
 });
 
 app.post('/imageurl', (req, res) => {
-    clarifai.models.predict(FACE_DETECTION_MODEL, req.body.input)
+    clarifai.models.predict(FACE_DETECT_MODEL, req.body.input)
     .then(data => {
         res.json(data)
     })
