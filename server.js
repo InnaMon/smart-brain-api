@@ -88,19 +88,7 @@ app.get('/profile/:id', (req, res) => {
             res.status(40).json('Not found')
         }
     })
-    .catch(err => res.status(40).json('error getting user'))
-})
-
-app.put('/image', (req, res) => {
-    const { id } = req.body;
-    postgres('users')
-    .where('id', '=', id)
-    .increment('entries', 1)
-    .returning('entries')
-    .then(entries => {
-        res.json(entries[0]);
-    })
-    .catch(err => res.status(404).json('unable to get entries'))
+    .catch(err => res.status(404).json('error getting user'))
 })
 
 const clarifai = new Clarifai.App({
@@ -113,6 +101,18 @@ app.post('/imageurl', (req, res) => {
         res.json(data)
     })
     .catch(err => res.status(404).json('unable to work with API'))
+})
+
+app.put('/image', (req, res) => {
+    const { id } = req.body;
+    postgres('users')
+    .where('id', '=', id)
+    .increment('entries', 1)
+    .returning('entries')
+    .then(entries => {
+        res.json(entries[0]);
+    })
+    .catch(err => res.status(404).json('unable to get entries'))
 })
 
 app.listen(process.env.PORT || 3001, () => {
