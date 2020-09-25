@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
 const Clarifai = require('clarifai');
-const { CLARIFAI_API } = require('./config');
 
 const postgres = knex({
     client: 'pg',
@@ -92,7 +91,7 @@ app.get('/profile/:id', (req, res) => {
 })
 
 const clarifai = new Clarifai.App({
-    apiKey: CLARIFAI_API
+    apiKey: process.env.CLARIFAI_API
 });
 
 app.post('/imageurl', (req, res) => {
