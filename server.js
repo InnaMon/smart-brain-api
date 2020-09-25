@@ -98,8 +98,8 @@ const clarifai = new Clarifai.App({
 app.post('/imageurl', (req, res) => {
     clarifai.models.predict(
         {
-            id: CLARIFAI_API,
-            version: "c0c0ac362b03416da06ab3fa36fb58e3"
+            id: "a403429f2ddf4b49b307e318f00e528b",
+            version: "34ce21a40cc24b6b96ffee54aabff139",
         }, req.body.input)
     .then(data => {
         res.json(data)
